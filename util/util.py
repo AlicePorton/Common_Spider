@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 
 # 匹配域名 解析一级域名
-from html_util import is_valid
+from util.html_util import is_valid
 
 R_Domain = r'(http|https)://(www.)?(\w+(\.)?)+'
 

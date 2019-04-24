@@ -2,10 +2,9 @@ import random
 import time
 
 import bs4
-import logging
 
-from SQLUtil import concat_sql, create_connection, insert_sql
-from html_util import is_valid_proxy, get_table_content
+from util.SQLUtil import concat_sql, create_connection, insert_sql
+from util.html_util import get_table_content
 from util.util import get_html
 
 ipv6_websites_tw = {
