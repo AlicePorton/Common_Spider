@@ -6,13 +6,17 @@ import requests
 from bs4 import BeautifulSoup
 
 # 匹配域名 解析一级域名
+from config.settings import TEMP_PATH, PROJECT_URL
 from html_util import is_valid
 
 R_Domain = r'(http|https)://(www.)?(\w+(\.)?)+'
 
 # 匹配中文英文
 R_Content = r'[\u2E80-\u9FFF]+(\w+)[\u2E80-\u9FFF]+'
-logging.basicConfig(filename='../log/out/output.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%m/%d/%Y %I:%M:%S')
+logging.basicConfig(filename=PROJECT_URL + '/log/out/output.log', level=logging.INFO, format='%(asctime)s %('
+                                                                                           'levelname)s: %('
+                                                                                           'message)s',
+                    datefmt='%m/%d/%Y %I:%M:%S')
 
 
 def get_file_content(filepath):
@@ -25,7 +29,7 @@ def write_file_content(filepath, content):
         f.write(content)
 
 
-def get_html(url, proxy=None):
+def get_html(url, proxy=None, sleep_time=5):
     """
     :param proxy: 代理
     :param url: 爬取的网址参数，先将爬的内容缓存起来
@@ -33,7 +37,7 @@ def get_html(url, proxy=None):
     """
     out_time = time.strftime("%Y%m%d", time.localtime())
     path_url = ''.join(re.findall(r'\w+', url))
-    path = 'temp/' + path_url + '-' + out_time
+    path = TEMP_PATH + '/' + path_url + '-' + out_time
     if not os.path.isfile(path):
         logging.info('the %s is not exist' % url)
         if proxy is None:
@@ -44,6 +48,7 @@ def get_html(url, proxy=None):
             content = requests.get(url=url, proxies=proxy, headers={'user-agent': 'Mozilla/5.0 (compatible; MSIE 8.0; '
                                                                                   'Windows NT '
                                                                                   '6.3; Win64; x64)'})
+            time.sleep(sleep_time)
             if is_valid(content):
                 logging.info('%s SUCCESS' % url)
                 content = content.content
@@ -57,8 +62,8 @@ def get_html(url, proxy=None):
         return get_file_content(path)
 
 
-def get_content(url):
-    content = get_html(url)
+def get_content(url, proxy=None):
+    content = get_html(url, proxy=proxy)
     return BeautifulSoup(content, 'lxml')
 
 
@@ -109,3 +114,8 @@ def exclude(target):
         if re.match(pattern, target):
             return False
     return True
+
+
+if __name__ == "__main__":
+    t = get_content('https://120.96.247.52')
+    print(t)

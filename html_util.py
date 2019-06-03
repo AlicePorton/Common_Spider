@@ -52,7 +52,7 @@ def is_valid_proxy(proxy_host):
 
 
 def get_table_content(table):
-    if table.find('thead') is None:
+    if not table.find('thead'):
         trs = table.find_all('tr')
         first_tr = trs[0]
         others_tr = trs[1:]

@@ -38,9 +38,10 @@ class ClientTestCase(unittest.TestCase):
         self.assertEqual(len(data["results"][0]), len(fields.split(',')))
 
     def test_get_data_by_ip(self):
-        query = """91.223.115.81"""
-        fields = "port"
+        query = """120.96.247.52"""
+        fields = "host, title, country, port"
         data = self.client.get_data(query, fields=fields)
+        print(data)
         self.assertIn("results", data)
         self.assertIn("page", data)
         self.assertIn("size", data)

@@ -5,6 +5,7 @@ import urllib.parse
 # from urllib import request
 import requests
 
+
 def http_get(url, param):
     # param = bytes(param)
     # param = urllib.parse.urlencode(param)
@@ -72,5 +73,3 @@ class Client:
         fileds = "country_name, province, latitude, longitude"
         raw = self.get_data(query, fields=fileds)
         return raw
-
-

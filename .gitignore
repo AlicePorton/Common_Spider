@@ -4,5 +4,7 @@
 .idea/
 temp
 *.log
+log/**
+output/**
 config/secure.py
 config/settings.py

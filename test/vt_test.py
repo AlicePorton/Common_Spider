@@ -22,6 +22,7 @@ class ClientTestCase(unittest.TestCase):
         """
         获取子域名信息
         :return:
+        {baidu.com:[], qq.com:[]..}
         """
         domains = ["baidu.com", "qq.com", "google.com"]
         data = self.client.get_subdomains(domains=domains)
