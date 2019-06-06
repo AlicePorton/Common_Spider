@@ -28,6 +28,7 @@ def get_html(url, proxy=None):
     if proxy is None:
         content = requests.get(url=url, headers={'user-agent': 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT '
                                                                '6.3; Win64; x64)'})
+        content = content.content
     else:
         # todo: 考虑代理失效的情况
         content = requests.get(url=url, proxies=proxy, headers={'user-agent': 'Mozilla/5.0 (compatible; MSIE 8.0; '
@@ -45,10 +46,12 @@ def get_content(url, proxy=None):
     return BeautifulSoup(content, 'lxml')
 
 
-proxies = {
-    "http": "http://127.0.0.1:8123",
-    "https": "https://127.0.0.1:8123"
-}
+# proxies = {
+#     "http": "http://127.0.0.1:8123",
+#     "https": "https://127.0.0.1:8123"
+# }
+
+proxies = None
 
 base_url = "https://wikileaks.org/hbgary-emails/"
 
