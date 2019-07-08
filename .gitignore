@@ -11,3 +11,4 @@ config/settings.py
 *.jsonl
 out/
 v1/test.json
+*.zip
