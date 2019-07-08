@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 # 匹配域名 解析一级域名
 from config.settings import TEMP_PATH, PROJECT_URL
+
 from html_util import is_valid
 
 R_Domain = r'(http|https)://(www.)?(\w+(\.)?)+'

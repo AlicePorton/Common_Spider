@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import base64
 import json
-import urllib.parse
+
 # from urllib import request
 import requests
 
@@ -76,3 +76,4 @@ class Client:
         fileds = "country_name, province, latitude, longitude"
         raw = self.get_data(query, fields=fileds)
         return raw
+
