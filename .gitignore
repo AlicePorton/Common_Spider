@@ -8,3 +8,6 @@ log/out
 output/**
 config/secure.py
 config/settings.py
+*.jsonl
+out/
+v1/test.json

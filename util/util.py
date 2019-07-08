@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import re
@@ -114,6 +115,28 @@ def exclude(target):
         if re.match(pattern, target):
             return False
     return True
+
+
+class Check:
+    @staticmethod
+    def getHttpStatusCode(url):
+        try:
+            request = requests.get(url, timeout=10)
+            httpStatusCode = request.status_code
+            return httpStatusCode
+        except requests.exceptions.HTTPError as e:
+            return e
+        except requests.exceptions.ConnectionError as e:
+            return e
+        except:
+            return 'fail'
+
+
+class Normalization:
+    @staticmethod
+    def write_to_json(obj, filename, **kwargs):
+        with open(filename, 'w') as f:
+            f.write(json.dumps(obj, **kwargs))
 
 
 if __name__ == "__main__":

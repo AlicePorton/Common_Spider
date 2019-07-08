@@ -82,13 +82,12 @@ def source_file(content, results):
         return results
 
 
-def download_by_url(url, results):
+def download_by_url(url):
     download_file = requests.get(url, proxies=proxies)
     filename = get_file_name(download_file.headers["Content-Disposition"])
-    results["filename"] = "data/" + str(__index) + "-" + filename
+    path = "data/" + str(__index) + "-" + filename
     print("{0} 文件正在下载...".format(filename))
-    save_file(results["filename"], download_file.content)
-    return results
+    save_file(path, download_file.content)
 
 
 def get_one_email(url):
@@ -99,12 +98,8 @@ def get_one_email(url):
     """
     content = get_content(url, proxy=proxies)
 
-    header = content.find(id="header")
-    body = content.find(id="uniquer")
     source = g_source(content)
-    results = {"to": header.span.get_text(), "header": header.get_text(), "content": body.get_text()}
-    results = download_by_url('https://wikileaks.org'+source, results)
-    return results
+    download_by_url('https://wikileaks.org'+source)
 
 
 def g_source(content):
@@ -131,7 +126,6 @@ def one_page_helper(page, from_email):
     url = search_url.format(page, from_email)
     print(url)
     target_urls = get_body(url)
-    results = []
     f = open('./{0}.jsonl'.format(from_email), 'a')
     [write_file(f, get_one_email(base_url + url)) for url in target_urls]
 

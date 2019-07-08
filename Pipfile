@@ -10,6 +10,7 @@ sqlalchemy = "*"
 elasticsearch = "*"
 requests = "*"
 lxml = "*"
+openpyxl = "*"
 
 [requires]
 python_version = "3.6"
