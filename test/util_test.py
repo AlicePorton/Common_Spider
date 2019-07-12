@@ -1,10 +1,14 @@
 import util.util as util
 import unittest
 
+from util.http import HttpUtil
+
 
 class UtilTestCase(unittest.TestCase):
     def test_http_check(self):
-        status = util.Check.getHttpStatusCode('http://www.baidu.com')
-        self.assertEqual(status, 200)
-        status_fail = util.Check.getHttpStatusCode('http://fasdfadsf.tw/')
-        self.assertNotEqual(status_fail, 200)
+        status = HttpUtil.check('http://www.baidu.com')
+        self.assertEqual('200', status)
+        status_fail = HttpUtil.check('http://fasdfadsf.tw/')
+        self.assertNotEqual('200', status_fail)
+
+
