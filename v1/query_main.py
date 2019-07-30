@@ -3,6 +3,7 @@ import os
 import config
 from components.nslookup.client import dns_query
 from util.color import R, G
+from util.data_util import DataUtil
 from util.query import Query
 from util.util import get_content
 
@@ -53,12 +54,13 @@ def write_to_excel(obj, excfile):
     cols = ["子域名", "IP", "主题", "cname记录"]
     ws.append(cols)  # 标题
     for k in obj:
-        rowdata = [k["domain"], k["ips"], k["title"], k["cname"]]
+        rowdata = [k["domain"], k["ip"], k["title"], k["cname"]]
         ws.append(rowdata)  # 写行
         # ws.append(cols) # 标题
     print('保存中')
     wb.save('../out/' + excfile + '.xlsx')  # 保存
     print('%s保存路径为 out/%s.xlsx' % (R, excfile))
+
 
 def get_domains_from_file(file=None):
     if file is None:
@@ -78,6 +80,7 @@ def get_all(test='', last='', file=''):
     results = []
     for domain in domains:
         domain = domain.replace('\n', '')
+        print(domain)
         title = get_title(domain)
         ips = get_ip(domain)
         if ips is 'None':
@@ -89,11 +92,12 @@ def get_all(test='', last='', file=''):
             "ips": ips,
             "cname": cname,
         }
-        results.append(one)
+        one = DataUtil.format_by_ip(one)
+        results = DataUtil.append(results, one)
     print(results)
 
     #
-    write_to_excel(results, test+last)
+    write_to_excel(results, test + last)
 
 
 if __name__ == '__main__':

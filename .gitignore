@@ -4,7 +4,6 @@
 .idea/
 temp
 *.log
-<<<<<<< HEAD
 log/out
 output/**
 config/secure.py
@@ -13,7 +12,5 @@ config/settings.py
 out/
 v1/test.json
 *.zip
-=======
 config/secure.py
 config/settings.py
->>>>>>> origin/master

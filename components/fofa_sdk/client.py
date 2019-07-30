@@ -4,6 +4,7 @@ import json
 
 # from urllib import request
 import requests
+from aiohttp import ClientSession
 
 
 def http_get(url, param):
@@ -22,6 +23,17 @@ def http_get(url, param):
         raise e
     return res
 
+
+async def async_http_get(url, param):
+    async with ClientSession() as session:
+        try:
+            async with session.get(url, params=param) as response:
+                res = await response.text()
+                print(res)
+                if "errmsg" in res:
+                    raise RuntimeError(res)
+        except:
+            pass
 
 class Client:
     """
@@ -62,6 +74,21 @@ class Client:
 
         return res
 
+    async def async_get_json_data(self, query_str, page=1, fields="", **kwargs):
+        api_full_url = "%s%s" % (self.base_url, self.search_api_url)
+        query_str = bytes(query_str, encoding="utf8")
+        param = {"qbase64": base64.b64encode(query_str), "email": self.email, "key": self.key, "page": page,
+                 "fields": fields}
+        for key, value in kwargs.items():
+            print('{0}:{1}'.format(key, value))
+            param[key] = value
+        res = await async_http_get(api_full_url, param)
+        return res
+
+    async def async_get_data(self, query_str, page=1, fields="", **kwargs):
+        res = await self.async_get_json_data(query_str, page, fields, **kwargs)
+        return json.loads(res)
+
     def get_domains(self, ip=""):
         query = """ip={0}""".format(ip)
         fileds = "domain"
@@ -76,4 +103,11 @@ class Client:
         fileds = "country_name, province, latitude, longitude"
         raw = self.get_data(query, fields=fileds)
         return raw
+
+    def get_port_by_ip(self, ip=""):
+        query="""ip={0}""".format(ip)
+        fileds = "port"
+        raw = self.get_data(query, fields=fileds)
+        ports = set(raw['results'])
+        return ",".join(ports)
 

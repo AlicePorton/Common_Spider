@@ -1,7 +1,12 @@
 import asyncio
+import re
 
 import requests
 from aiohttp import ClientSession
+
+headers = {'user-agent': 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.3; Win64; x64)'}
+proxy = "http://127.0.0.1:8123"
+
 
 class HttpUtil:
     @staticmethod
@@ -50,26 +55,24 @@ class HttpUtil:
                 else:
                     print('url {0} RED'.format(url))
 
+    @staticmethod
+    def get_title(content):
+        title = r'<title>(.*?)</title>'
+        result = re.search(title, content)
+        if result is not None:
+            return result.group(1)
+        return 'None'
 
-if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(HttpUtil.async_check('http://www.baidu.com'))
-    # python3 可以使用asyncio来实现
-    # import threading
-    #
-    #
-    # def go_threading(nums, urls):
-    #     global interesting
-    #     interesting = []
-    #     threads = []
-    #     for i in nums:
-    #         t = threading.Thread(target=HttpUtil.check, args=(urls[i]))
-    #         threads.append(t)
-    #     for i in nums:
-    #         threads[i].start()
-    #     for i in nums:
-    #         threads[i].join()
-    #     print('\n\033[1;32m[DONE..]')
-    #
-    #
-    # go_threading(range(1), ['http://www.baidu.com'])
+    @staticmethod
+    async def asnyc_get_title(url, results):
+        url = url.replace('\n', '').split(' ')[0]
+        async with ClientSession() as session:
+            try:
+                async with session.get('http://' + url, headers=headers, proxy=proxy) as response:
+                    content = await response.text()
+                    if url not in results:
+                        test = results[url] = {}
+                    test = results[url]
+                    test['title'] = HttpUtil.get_title(content)
+            except:
+                pass
