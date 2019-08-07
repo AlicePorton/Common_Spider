@@ -2,10 +2,14 @@ import asyncio
 import re
 
 import requests
-from aiohttp import ClientSession
+from aiohttp import ClientSession, ClientTimeout
+
+from test.dns_test import warning
 
 headers = {'user-agent': 'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.3; Win64; x64)'}
-proxy = "http://127.0.0.1:8123"
+# proxy = "http://127.0.0.1:8123"
+proxy = None
+timeout = ClientTimeout(total=10)
 
 
 class HttpUtil:
@@ -65,14 +69,16 @@ class HttpUtil:
 
     @staticmethod
     async def asnyc_get_title(url, results):
-        url = url.replace('\n', '').split(' ')[0]
+        if url not in results:
+            test = results[url] = {}
+        test = results[url]
+
         async with ClientSession() as session:
             try:
-                async with session.get('http://' + url, headers=headers, proxy=proxy) as response:
+                async with session.get('http://' + url, headers=headers, proxy=proxy, timeout=timeout) as response:
                     content = await response.text()
-                    if url not in results:
-                        test = results[url] = {}
-                    test = results[url]
                     test['title'] = HttpUtil.get_title(content)
             except:
+                warning('the {0} 网站主题为空'.format(url))
+                test['title'] = 'None'
                 pass

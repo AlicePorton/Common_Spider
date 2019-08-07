@@ -31,3 +31,8 @@ class ClientTestCase(unittest.TestCase):
         self.assertGreaterEqual(len(data), 0)
         self.assertIn(domains[0], data)
         self.assertGreater(len(data[domains[0]]), 0)
+
+        domains_tuple = [("baidu.com", "百度")]
+        # tuple做字典的key值
+        data = self.client.get_subdomains(domains=domains_tuple)
+        self.assertEqual(len(data), len(domains_tuple))

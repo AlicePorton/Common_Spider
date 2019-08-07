@@ -18,6 +18,7 @@ class Client:
     """
     通过virustotal爬取子域名信息
     """
+
     def __init__(self, key):
         self.key = key
         self.base_url = "https://www.virustotal.com"
@@ -28,6 +29,7 @@ class Client:
         通过api的方式获取子域名信息
         :return:
         """
+        print("-[x] scanning... 正在获取 {0} 子域名数据".format(domain))
         api_full_url = "{base}{query}".format(base=self.base_url, query=self.search_api_url)
         params = {"apikey": self.key, "domain": domain}
         res = http_get(api_full_url, params)
@@ -38,6 +40,8 @@ class Client:
         :param domains: 域名数据集合
         :return: 对应的子域名数据{"domain1": ["sub1", "sub2]}, ..
         """
-        return {v: self.get_domain_infos(v)["subdomains"] for v in domains}
-
+        if type(domains[0]) is tuple:
+            return {v[0]: self.get_domain_infos(v[0])["subdomains"] for v in domains}
+        return {v: self.get_domain_infos(v)["subdomains"]
+                for v in domains}
 
